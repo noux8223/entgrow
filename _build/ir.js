@@ -688,6 +688,6 @@ function card(s, x, y, w, h, fill) {
   });
 }
 
-pres.writeFile({ fileName: "IR_덱_ENT_GROW.pptx" }).then(() => {
+pres.writeFile({ fileName: "docs/IR_덱_ENT_GROW.pptx" }).then(() => {
   console.log("PPTX generated");
 });

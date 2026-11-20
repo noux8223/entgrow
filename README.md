@@ -1,12 +1,12 @@
-# ENT GROW 산출물
+# ENT GROW
 
 | 파일 | 용도 | 비고 |
 |---|---|---|
-| `사업계획서_ENT_GROW.md` | 전체 사업계획서 (13장 + 부록) | 내부 실행·투자 검토용 원본 |
-| `IR_덱_ENT_GROW.pptx` | IR 덱 10장 (PowerPoint) | 발표·수정용 |
-| `IR_덱_ENT_GROW.html` | IR 덱 10장 (웹) | 방향키로 넘김, 인쇄 시 PDF 변환 |
-| `정부지원사업_요약본_ENT_GROW.md` | 정부지원사업 제출용 요약 (10~15p) | 평가항목 대응표 포함 |
-| `원페이지_사업개요서_ENT_GROW.html` | A4 1장 사업개요서 | 인쇄/PDF 저장 버튼 포함 |
+| [`docs/사업계획서_ENT_GROW.md`](docs/사업계획서_ENT_GROW.md) | 전체 사업계획서 (13장 + 부록) | 내부 실행·투자 검토용 원본 |
+| [`docs/IR_덱_ENT_GROW.pptx`](docs/IR_덱_ENT_GROW.pptx) | IR 덱 10장 (PowerPoint) | 발표·수정용 |
+| [`docs/IR_덱_ENT_GROW.html`](docs/IR_덱_ENT_GROW.html) | IR 덱 10장 (웹) | 방향키로 넘김, 인쇄 시 PDF 변환 |
+| [`docs/정부지원사업_요약본_ENT_GROW.md`](docs/정부지원사업_요약본_ENT_GROW.md) | 정부지원사업 제출용 요약 (10~15p) | 평가항목 대응표 포함 |
+| [`docs/원페이지_사업개요서_ENT_GROW.html`](docs/원페이지_사업개요서_ENT_GROW.html) | A4 1장 사업개요서 | 인쇄/PDF 저장 버튼 포함 |
 | `myidol/` | **MY IDOL 서비스 데모 웹사이트** | 연습생·팬·엔터 대시보드, `myidol/start.bat`으로 실행 |
 
 ## 사용 방법
@@ -18,7 +18,7 @@
 
 ## 재생성 (PPTX)
 
-`_build/ir.js`가 PPTX 생성 스크립트입니다.
+`_build/ir.js`가 PPTX 생성 스크립트이며 결과물은 `docs/`에 저장됩니다.
 
 ```bash
 npm install pptxgenjs
