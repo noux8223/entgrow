@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>엔터 대시보드 — MY IDOL PARTNER</title>
+<meta name="theme-color" content="#0a0a0c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23d8ff4a'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='Arial' font-weight='900' font-size='20' fill='%230a0a0c'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body data-app="ent">
+<div class="grain" aria-hidden="true"></div>
+
+<aside class="sidebar" id="sidebar"></aside>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<div class="app-main">
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="메뉴">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <div class="topbar-title" id="topbarTitle"></div>
+    <div class="topbar-actions" id="topbarActions"></div>
+  </header>
+  <main class="app-body" id="appBody"></main>
+</div>
+
+<div class="auth-gate" id="authGate"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

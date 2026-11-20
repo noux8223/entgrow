@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENT GROW · IR Deck</title>
+<style>
+  :root{
+    --bg:#0B1020; --card:#161C33; --card2:#1E2542; --line:#242C4D;
+    --text:#EDF0FF; --sub:#C9D0EB; --muted:#8B94B8; --dim:#5A6386;
+    --v:#7C5CFF; --v2:#9A7CFF; --m:#00E0B8; --p:#FF5C8A; --y:#FFC857;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:#05070F; color:var(--text);
+    font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  #stage{ width:1280px; height:720px; position:relative; transform-origin:center center; flex:none; }
+
+  .slide{
+    position:absolute; inset:0; width:1280px; height:720px;
+    background:var(--bg); padding:56px 64px; display:none;
+    overflow:hidden;
+  }
+  .slide.active{display:block}
+  .slide::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:5px;
+    background:linear-gradient(90deg,var(--v),var(--v2) 45%,var(--m));
+  }
+
+  .kicker{font-size:11px; letter-spacing:3px; color:var(--m); font-weight:700; margin-bottom:10px}
+  h1{font-size:30px; font-weight:800; letter-spacing:-.5px; margin-bottom:34px; line-height:1.25}
+
+  .foot{
+    position:absolute; left:64px; right:64px; bottom:26px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:10px; letter-spacing:1px; color:var(--dim);
+  }
+  .foot .no{color:var(--v); font-weight:800; font-size:12px; letter-spacing:0}
+
+  .card{background:var(--card); border:1px solid var(--line); border-radius:12px}
+
+  /* ---------- cover ---------- */
+  .cover{padding:0}
+  .cover::before{height:100%; width:8px; right:auto; background:var(--v)}
+  .orb{position:absolute; border-radius:50%; filter:blur(2px)}
+  .orb.a{width:640px;height:640px;right:-140px;top:-260px;background:radial-gradient(circle,rgba(124,92,255,.35),transparent 68%)}
+  .orb.b{width:420px;height:420px;right:80px;bottom:-160px;background:radial-gradient(circle,rgba(0,224,184,.20),transparent 70%)}
+  .cover-in{position:relative; padding:120px 96px; height:100%}
+  .brand{font-size:64px; font-weight:900; letter-spacing:2px; line-height:1}
+  .brand-sub{margin-top:16px; font-size:12px; letter-spacing:4px; color:var(--m); font-weight:700}
+  .cover-copy{margin-top:52px; font-size:23px; line-height:1.6; color:var(--sub); font-weight:500}
+  .chips{display:flex; gap:12px; margin-top:38px}
+  .chip{padding:8px 18px; border:1px solid #2E3760; border-radius:999px; font-size:11px; color:#A9B3D6; background:rgba(22,28,51,.7)}
+  .tagline{position:absolute; left:96px; bottom:118px; font-size:15px; font-style:italic; color:var(--m)}
+  .cover-date{position:absolute; left:96px; bottom:70px; font-size:11px; color:var(--dim); letter-spacing:1px}
+
+  /* ---------- grids ---------- */
+  .g3{display:grid; grid-template-columns:repeat(3,1fr); gap:24px}
+  .g2{display:grid; grid-template-columns:1fr 1fr; gap:26px}
+
+  /* ---------- 02 ---------- */
+  .stat{padding:18px 22px; height:140px; display:flex; flex-direction:column; justify-content:center}
+  .stat b{font-size:38px; font-weight:900; line-height:1.1; letter-spacing:-1px}
+  .stat span{font-size:11px; color:var(--muted); margin-top:6px}
+  .pain{margin-top:22px; padding:20px 22px 12px; position:relative; border-left:4px solid var(--v)}
+  .pain h3{font-size:11px; letter-spacing:1px; font-weight:800; margin-bottom:6px}
+  .pain h4{font-size:16px; font-weight:800; margin-bottom:14px}
+  .pain li{list-style:none; font-size:11.5px; color:var(--sub); line-height:1.55; margin-bottom:11px; padding-left:12px; position:relative}
+  .pain li::before{content:"·"; position:absolute; left:0; color:var(--muted)}
+  .punch{position:absolute; right:64px; bottom:58px; font-size:12px; font-weight:700; color:var(--muted)}
+  .band{
+    margin-top:22px; padding:15px 22px; border-radius:10px;
+    background:linear-gradient(90deg,rgba(124,92,255,.16),rgba(0,224,184,.07));
+    border:1px solid #2E3760; font-size:12px; color:var(--sub);
+    display:flex; justify-content:space-between; align-items:center; gap:20px;
+  }
+  .band b{color:var(--text)}
+  .band em{font-style:normal; font-size:11px; color:var(--m); font-weight:800}
+
+  /* ---------- 03 ---------- */
+  .layer{padding:28px 24px 26px}
+  .layer .tag{display:inline-block; padding:4px 12px; border-radius:999px; font-size:10px; font-weight:800; letter-spacing:1px; margin-bottom:16px}
+  .layer h3{font-size:18px; font-weight:800; margin-bottom:20px}
+  .layer p{font-size:12px; color:var(--sub); line-height:1.55; margin-bottom:12px}
+  .flow{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:34px}
+  .chev{
+    height:68px; display:flex; align-items:center; justify-content:center;
+    font-size:12.5px; font-weight:800; color:var(--sub); background:var(--card2);
+    border:1px solid #2E3760; clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%,8% 50%);
+  }
+  .chev.on{background:var(--m); color:#06131a; border-color:var(--m)}
+  .net{margin-top:28px; padding:24px 28px; background:var(--card2); border-radius:12px; font-size:14px; color:var(--sub)}
+
+  /* ---------- 04 ---------- */
+  .steps{display:flex; flex-direction:column; gap:12px}
+  .step{display:flex; align-items:center; gap:16px; padding:14px 18px; height:90px}
+  .step b{font-size:18px; font-weight:900; color:var(--v); width:30px}
+  .step .t{font-size:13px; font-weight:800}
+  .step .d{font-size:10px; color:var(--muted); margin-top:4px}
+  .panel{padding:24px 26px; background:var(--card2); border-radius:14px; height:100%}
+  .panel .lab{font-size:11px; letter-spacing:2px; font-weight:800; color:var(--m)}
+  .panel h3{font-size:15px; font-weight:800; margin:8px 0 22px}
+  .bar-row{display:grid; grid-template-columns:88px 1fr 40px; align-items:center; gap:12px; margin-bottom:16px}
+  .bar-row span{font-size:10.5px; color:var(--sub)}
+  .track{height:8px; background:#2A3255; border-radius:99px; overflow:hidden}
+  .fill{height:100%; border-radius:99px}
+  .bar-row em{font-size:10px; color:var(--muted); font-style:normal; text-align:right}
+  .note{font-size:9.5px; color:var(--muted); margin-top:18px; line-height:1.5}
+
+  /* ---------- 05 ---------- */
+  .mkt{display:grid; grid-template-columns:70px 210px 340px 1fr; gap:18px; align-items:center; margin-bottom:34px; padding:8px 0}
+  .mkt .lvl{font-size:13px; font-weight:900; letter-spacing:1px}
+  .mkt .val{font-size:29px; font-weight:900}
+  .mkt .desc{font-size:11px; color:var(--muted); line-height:1.5}
+  .mkt .bar{height:32px; border-radius:99px}
+  .mkt-note{margin-top:34px; padding:26px 28px; background:var(--card2); border-radius:12px; font-size:13.5px; color:var(--sub)}
+
+  /* ---------- 06 ---------- */
+  table.rev{width:100%; border-collapse:collapse; font-size:11px}
+  table.rev th, table.rev td{border:1px solid var(--line); padding:14px 12px; text-align:left}
+  table.rev th{color:var(--m); font-weight:800; font-size:10px; letter-spacing:1px}
+  table.rev td{color:var(--sub)}
+  table.rev td:last-child, table.rev th:last-child{text-align:right}
+  .tier{padding:18px 20px; display:flex; justify-content:space-between; align-items:center}
+  .tier .nm{font-size:12.5px; font-weight:800}
+  .tier .ds{font-size:9.5px; color:var(--muted); margin-top:4px}
+  .tier .pr{font-size:16px; font-weight:900; color:var(--m)}
+  .kpis{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:24px}
+  .kpi{padding:18px 8px; background:var(--card2); border-radius:10px; text-align:center}
+  .kpi b{display:block; font-size:15px; font-weight:900; color:var(--y)}
+  .kpi span{font-size:8.5px; color:var(--muted)}
+
+  /* ---------- 07 ---------- */
+  .phases{display:grid; grid-template-columns:repeat(5,1fr); gap:12px}
+  .phase{padding:20px 16px; height:205px; border-radius:12px; border:1px solid #2E3760; background:var(--card)}
+  .phase .yr{font-size:10px; font-weight:800; letter-spacing:1px}
+  .phase h3{font-size:18px; font-weight:900; margin:10px 0 14px}
+  .phase p{font-size:10.5px; color:var(--sub); line-height:1.7}
+  .chans{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:34px}
+  .chan{padding:20px 20px; background:var(--card2); border-radius:12px}
+  .chan b{font-size:10px; font-weight:800; color:var(--m)}
+  .chan p{font-size:11px; color:var(--sub); margin-top:7px; line-height:1.55}
+
+  /* ---------- 08 ---------- */
+  .map{
+    position:relative; height:400px; background:#10162B; border:1px solid #2E3760; border-radius:12px;
+    background-image:linear-gradient(#1a2240 1px,transparent 1px),linear-gradient(90deg,#1a2240 1px,transparent 1px);
+    background-size:50% 50%;
+  }
+  .axis{position:absolute; font-size:9px; color:var(--muted)}
+  .dot{position:absolute; display:flex; align-items:center; gap:7px; font-size:9px; color:#7F88AB}
+  .dot i{width:7px;height:7px;border-radius:50%;background:var(--dim);display:block}
+  .dot.me{font-size:12px; font-weight:900; color:var(--text)}
+  .dot.me i{width:16px;height:16px;box-shadow:0 0 0 8px rgba(124,92,255,.18)}
+  .moat{padding:20px 24px; background:var(--card2); border-radius:14px; height:100%}
+  .moat h4{font-size:10px; letter-spacing:2px; color:var(--m); font-weight:800; margin-bottom:20px}
+  .moat .it{margin-bottom:18px}
+  .moat .it b{font-size:12px; font-weight:800}
+  .moat .it b::before{content:attr(data-n); color:var(--v); margin-right:10px; font-weight:900}
+  .moat .it p{font-size:9.5px; color:var(--muted); margin-top:5px; padding-left:24px}
+
+  /* ---------- 09 ---------- */
+  .fin{display:grid; grid-template-columns:1fr 1fr; gap:30px}
+  table.fin{width:100%; border-collapse:collapse; font-size:10.5px; table-layout:fixed}
+  table.fin col:first-child{width:86px}
+  table.fin th:first-child, table.fin td:first-child{white-space:nowrap}
+  table.fin th,table.fin td{border:1px solid var(--line); padding:9px 8px; text-align:right}
+  table.fin th:first-child,table.fin td:first-child{text-align:left}
+  table.fin th{color:var(--m); font-size:9.5px; font-weight:800}
+  table.fin td{color:var(--sub)}
+  table.fin tr.main td{color:var(--text); font-weight:800}
+  table.fin tr.op td{color:var(--p); font-weight:800}
+  .chart{display:flex; align-items:flex-end; gap:16px; height:250px; padding:0 10px; border-bottom:1px solid var(--line)}
+  .col{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%}
+  .col .v{font-size:9px; color:var(--muted); margin-bottom:6px}
+  .col .b{width:100%; border-radius:6px 6px 0 0; background:linear-gradient(180deg,var(--v2),var(--v))}
+  .xlab{display:flex; gap:16px; padding:8px 10px 0}
+  .xlab span{flex:1; text-align:center; font-size:9px; color:var(--muted)}
+  .rounds{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:18px}
+  .round{padding:10px 12px; background:var(--card2); border-radius:10px}
+  .round span{font-size:8.5px; color:var(--muted)}
+  .round b{display:block; font-size:16px; font-weight:900; color:var(--y); margin-top:2px}
+  .round em{font-style:normal; font-size:8px; color:#7F88AB}
+
+  /* ---------- 10 ---------- */
+  .ask{display:flex; flex-direction:column; justify-content:center; height:100%; padding:0 96px}
+  .ask h1{font-size:34px; line-height:1.45; margin:16px 0 0; font-weight:900}
+  .ms{margin-top:36px}
+  .ms div{display:flex; gap:22px; font-size:12px; margin-bottom:14px; color:var(--sub)}
+  .ms b{color:var(--v); width:46px; font-weight:900}
+  .quote{margin-top:34px; padding:18px 24px; background:var(--card2); border-radius:12px; font-size:14px; font-style:italic; color:var(--m); display:inline-block}
+  .sign{position:absolute; right:96px; bottom:96px; text-align:right}
+  .sign b{font-size:14px}
+  .sign p{font-size:9px; color:var(--muted); margin-top:6px}
+
+  /* ---------- controls ---------- */
+  #hud{
+    position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
+    display:flex; align-items:center; gap:14px; z-index:50;
+    background:rgba(11,16,32,.86); border:1px solid #242C4D; border-radius:999px;
+    padding:8px 16px; backdrop-filter:blur(8px);
+  }
+  #hud button{
+    background:none;border:none;color:var(--sub);font-size:15px;cursor:pointer;padding:2px 6px;
+  }
+  #hud button:hover{color:var(--m)}
+  #pbar{width:160px;height:3px;background:#242C4D;border-radius:99px;overflow:hidden}
+  #pfill{height:100%;background:linear-gradient(90deg,var(--v),var(--m));width:10%;transition:width .25s}
+  #pnum{font-size:10px;color:var(--muted);letter-spacing:1px;min-width:44px;text-align:center}
+
+  @media print{
+    @page{size:1280px 720px; margin:0}
+    body{background:#fff; display:block; overflow:visible}
+    #stage{transform:none!important; width:1280px; height:auto}
+    #hud{display:none}
+    .slide{display:block!important; position:relative; page-break-after:always; break-after:page}
+    .slide:last-child{page-break-after:auto}
+  }
+</style>
+</head>
+<body>
+
+<div id="stage">
+
+  <!-- 01 -->
+  <section class="slide cover active">
+    <div class="orb a"></div><div class="orb b"></div>
+    <div class="cover-in">
+      <div class="brand">ENT GROW</div>
+      <div class="brand-sub">엔터 그로우 &nbsp;|&nbsp; IDOL TRAINEE DATA PLATFORM</div>
+      <div class="cover-copy">연습생의 노력을 기록하고,<br>그 기록을 데뷔의 기회로 바꿉니다.</div>
+      <div class="chips">
+        <span class="chip">B2B2C</span>
+        <span class="chip">성장 포트폴리오</span>
+        <span class="chip">프리데뷔 데이터</span>
+      </div>
+      <div class="tagline">Grow in the dark. Shine with data.</div>
+      <div class="cover-date">사업계획서 v0.9 &nbsp;·&nbsp; 2026. 11.</div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="slide">
+    <div class="kicker">PROBLEM</div>
+    <h1>데뷔까지 3~7년, 남는 기록은 0</h1>
+    <div class="g3">
+      <div class="card stat"><b style="color:var(--p)">3~7년</b><span>데뷔까지 걸리는 연습 기간</span></div>
+      <div class="card stat"><b style="color:var(--y)">0건</b><span>체계적으로 남는 성장 기록</span></div>
+      <div class="card stat"><b style="color:var(--m)">0명</b><span>데뷔 전 확보 가능한 팬</span></div>
+    </div>
+    <div class="g3">
+      <div class="card pain" style="border-left-color:var(--p)">
+        <h3 style="color:var(--p)">연습생</h3>
+        <h4>노력의 비가시성</h4>
+        <ul>
+          <li>매일 6~10시간 연습, 기록은 남지 않음</li>
+          <li>사진·영상은 폰과 메신저에 흩어져 유실</li>
+          <li>평가는 단발성, 성장은 확인 불가</li>
+        </ul>
+      </div>
+      <div class="card pain" style="border-left-color:var(--y)">
+        <h3 style="color:var(--y)">팬</h3>
+        <h4>응원할 대상의 부재</h4>
+        <ul>
+          <li>데뷔 전 연습생은 공식 채널이 없음</li>
+          <li>응원하고 싶어도 방법과 피드백이 없음</li>
+          <li>데뷔 후에는 초기 팬이 될 기회를 상실</li>
+        </ul>
+      </div>
+      <div class="card pain" style="border-left-color:var(--m)">
+        <h3 style="color:var(--m)">엔터</h3>
+        <h4>데이터 없는 스카우팅</h4>
+        <ul>
+          <li>연습생 정보가 엑셀·카톡에 분산</li>
+          <li>스카우트는 인맥과 감에 의존</li>
+          <li>이탈·번아웃 징후를 사전 감지 불가</li>
+        </ul>
+      </div>
+    </div>
+    <div class="band"><span>기록 · 팬덤 · 스카우팅을 <b>동시에</b> 다루는 서비스는 아직 없습니다.</span><em>THE GAP</em></div>
+    <div class="punch">노력은 존재하지만, 증명되지 않는다.</div>
+    <div class="foot"><span>ENT GROW · IR DECK · CONFIDENTIAL</span><span class="no">02</span></div>
+  </section>
+
+  <!-- 03 -->
+  <section class="slide">
+    <div class="kicker">SOLUTION</div>
+    <h1>기록이 성장이 되고, 성장이 기회가 되는 구조</h1>
+    <div class="g3">
+      <div class="card layer">
+        <span class="tag" style="background:rgba(124,92,255,.15);color:var(--v)">GROW</span>
+        <h3>연습생</h3>
+        <p>· 연습 일지 · 사진/영상 보관</p>
+        <p>· 스킬 트래킹 · 성장 포트폴리오</p>
+      </div>
+      <div class="card layer">
+        <span class="tag" style="background:rgba(255,92,138,.15);color:var(--p)">FAN</span>
+        <h3>팬</h3>
+        <p>· 공개 프로필 · 성장 타임라인</p>
+        <p>· 응원 · 멤버십 · 후원</p>
+      </div>
+      <div class="card layer">
+        <span class="tag" style="background:rgba(0,224,184,.15);color:var(--m)">PARTNER / SCOUT</span>
+        <h3>엔터테인먼트사</h3>
+        <p>· 연습생 통합 관리 · 성장 리포트</p>
+        <p>· 스카우트 검색 · 오디션 운영</p>
+      </div>
+    </div>
+    <div class="flow">
+      <div class="chev">매일의 기록</div>
+      <div class="chev">정량 지표</div>
+      <div class="chev">성장 곡선</div>
+      <div class="chev on">스카우트 리포트</div>
+    </div>
+    <div class="net">데이터가 쌓일수록 스카우트 정확도와 팬 충성도가 함께 올라가는 <b>양면 네트워크</b></div>
+    <div class="band"><span>기록이 곧 <b>증명</b>이고, 증명이 곧 <b>기회</b>입니다.</span><em>PROOF → OPPORTUNITY</em></div>
+    <div class="foot"><span>ENT GROW · IR DECK · CONFIDENTIAL</span><span class="no">03</span></div>
+  </section>
+
+  <!-- 04 -->
+  <section class="slide">
+    <div class="kicker">PRODUCT</div>
+    <h1>성장 포트폴리오 + EGI 성장지수</h1>
+    <div class="g2" style="grid-template-columns:1fr 1.28fr">
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:16px">파편이 자산이 되는 구조</div>
+        <div class="steps">
+          <div class="card step"><b>01</b><div><div class="t">매일의 기록</div><div class="d">사진 · 30초 영상 · 일지</div></div></div>
+          <div class="card step"><b>02</b><div><div class="t">정량 지표</div><div class="d">연습시간 · 스킬 · 팬 반응</div></div></div>
+          <div class="card step"><b>03</b><div><div class="t">성장 곡선</div><div class="d">기간별 변화율 · 마일스톤</div></div></div>
+          <div class="card step"><b>04</b><div><div class="t">스카우트 리포트</div><div class="d">PDF 포트폴리오 · 매칭 추천</div></div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="lab">EGI · ENT GROW INDEX</div>
+        <h3>성장 가능성을 보여주는 합성 지수</h3>
+        <div class="bar-row"><span>성장률</span><div class="track"><div class="fill" style="width:100%;background:var(--v)"></div></div><em>30%</em></div>
+        <div class="bar-row"><span>연습량</span><div class="track"><div class="fill" style="width:83%;background:var(--v2)"></div></div><em>25%</em></div>
+        <div class="bar-row"><span>코치빌리티</span><div class="track"><div class="fill" style="width:67%;background:var(--p)"></div></div><em>20%</em></div>
+        <div class="bar-row"><span>다양성</span><div class="track"><div class="fill" style="width:50%;background:var(--y)"></div></div><em>15%</em></div>
+        <div class="bar-row"><span>팬 반응</span><div class="track"><div class="fill" style="width:33%;background:var(--m)"></div></div><em>10%</em></div>
+        <div class="note">절대 실력 순위가 아닌 ‘성장 가능성’ 지표<br>팬에게는 구간(band)으로만 노출, 원점수는 소속사에만 제공</div>
+      </div>
+    </div>
+    <div class="band"><span>하루 3분의 기록이 3년 뒤 <b>하나의 포트폴리오</b>가 됩니다.</span><em>RECORD → ASSET</em></div>
+    <div class="foot"><span>ENT GROW · IR DECK · CONFIDENTIAL</span><span class="no">04</span></div>
+  </section>
+
+  <!-- 05 -->
+  <section class="slide">
+    <div class="kicker">MARKET</div>
+    <h1>국내 연습생 데이터 시장은 아직 비어 있습니다</h1>
+    <div class="mkt">
+      <div class="lvl" style="color:var(--v)">TAM</div>
+      <div class="val">3조 원</div>
+      <div class="desc">글로벌 K-pop 팬덤 플랫폼 +<br>아티스트 관리 SaaS</div>
+      <div class="bar" style="width:100%;background:rgba(124,92,255,.55)"></div>
+    </div>
+    <div class="mkt">
+      <div class="lvl" style="color:var(--v2)">SAM</div>
+      <div class="val">2,000억 원</div>
+      <div class="desc">국내 연습생 관리 + 프리데뷔 팬덤 +<br>스카우트 매칭</div>
+      <div class="bar" style="width:62%;background:rgba(154,124,255,.55)"></div>
+    </div>
+    <div class="mkt">
+      <div class="lvl" style="color:var(--m)">SOM</div>
+      <div class="val">300억 원</div>
+      <div class="desc">3년 내 확보 가능 시장<br>(기획사 100곳 중심)</div>
+      <div class="bar" style="width:26%;background:rgba(0,224,184,.55)"></div>
+    </div>
+    <div class="mkt-note">연습생 5,000~10,000명 &nbsp;·&nbsp; 기획사 100~200곳 &nbsp;·&nbsp; 프리데뷔 팬 50만~100만 명 <span style="color:var(--dim)">(추정)</span></div>
+    <div class="band"><span>연습생 5,000~10,000명 · 기획사 100~200곳 · <b>프리데뷔 팬 50만~100만 명</b></span><em>UNDERSERVED</em></div>
+    <div class="foot"><span>ENT GROW · IR DECK · CONFIDENTIAL</span><span class="no">05</span></div>
+  </section>
+
+  <!-- 06 -->
+  <section class="slide">
+    <div class="kicker">BUSINESS MODEL</div>
+    <h1>B2B2C — 기획사가 비용을 내고, 팬이 규모를 만든다</h1>
+    <div class="g2" style="grid-template-columns:1fr 1fr;align-items:start">
+      <div>
+        <table class="rev">
+          <tr><th>수익원</th><th>과금 방식</th><th>Y3 비중</th></tr>
+          <tr><td>기획사 구독</td><td>월정액 · 연습생 수 티어</td><td>27%</td></tr>
+          <tr><td>스카우트 열람·매칭</td><td>열람권 / 성사 수수료</td><td>12%</td></tr>
+          <tr><td>팬 멤버십</td><td>월 4,900원 구독</td><td>35%</td></tr>
+          <tr><td>후원·응원 수수료</td><td>건별 10~15%</td><td>17%</td></tr>
+          <tr><td>커머스·광고·리포트</td><td>수수료 / 광고비</td><td>9%</td></tr>
+        </table>
+        <div class="band" style="margin-top:18px">
+          <span>기획사는 관리 비용을, 팬은 응원을 지불합니다.<br>기록은 무료로 쌓입니다.</span><em>B2B → B2C</em>
+        </div>
+      </div>
+      <div>
+        <div class="card tier" style="margin-bottom:10px">
+          <div><div class="nm">PARTNER Pro</div><div class="ds">연습생 100명 · 오디션 운영</div></div>
+          <div class="pr">월 49만 원</div>
+        </div>
+        <div class="card tier" style="margin-bottom:10px">
+          <div><div class="nm">SCOUT</div><div class="ds">검색 · 열람 20건</div></div>
+          <div class="pr">월 29만 원</div>
+        </div>
+        <div class="card tier">
+          <div><div class="nm">FAN 멤버십</div><div class="ds">전용 콘텐츠 · 응원 배지</div></div>
+          <div class="pr">월 4,900원</div>
+        </div>
+        <div class="kpis">
+          <div class="kpi"><b>4.0~4.9x</b><span>LTV/CAC</span></div>
+          <div class="kpi"><b>1.6~7.5개월</b><span>회수 기간</span></div>
+          <div class="kpi"><b>12억</b><span>Y3 ARR</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>ENT GROW · IR DECK · CONFIDENTIAL</span><span class="no">06</span></div>
+  </section>
+
+  <!-- 07 -->
+  <section class="slide">
+    <div class="kicker">GO-TO-MARKET</div>
+    <h1>파일럿 → 확산 → 표준화 → 글로벌</h1>
+    <div class="phases">
+      <div class="phase" style="border-color:#5a48b8"><div class="yr" style="color:var(--v)">2027 H1</div><h3>파일럿</h3><p>기획사 3곳<br>연습생 100명</p></div>
+      <div class="phase" style="border-color:#5a48b8"><div class="yr" style="color:var(--v2)">2027 H2</div><h3>검증</h3><p>기획사 10곳<br>팬 1만 명</p></div>
+      <div class="phase" style="border-color:#7a3550"><div class="yr" style="color:var(--p)">2028</div><h3>확산</h3><p>기획사 40곳<br>팬 8만 명</p></div>
+      <div class="phase" style="border-color:#7a5f28"><div class="yr" style="color:var(--y)">2029</div><h3>표준화</h3><p>기획사 100곳<br>팬 30만 명</p></div>
+      <div class="phase" style="border-color:#1a6a5c"><div class="yr" style="color:var(--m)">2030~</div><h3>글로벌</h3><p>해외 레이블<br>글로벌 팬</p></div>
+    </div>
+    <div class="chans">
+      <div class="chan"><b>기획사</b><p>무료 파일럿 → 데이터 리포트 → 유료 전환</p></div>
+      <div class="chan"><b>연습생</b><p>‘무료 포트폴리오 제작’ 훅 · 오디션 시즌 캠페인</p></div>
+      <div class="chan"><b>팬</b><p>숏폼 성장 타임라인 · 응원 랭킹 이벤트</p></div>
+    </div>
+    <div class="band"><span>첫 3곳의 레퍼런스가 <b>나머지 97곳</b>을 데려옵니다.</span><em>REFERENCE FIRST</em></div>
+    <div class="punch" style="bottom:58px">첫 3곳의 레퍼런스가 나머지 97곳을 데려온다.</div>
+    <div class="foot"><span>ENT GROW · IR DECK · CONFIDENTIAL</span><span class="no">07</span></div>
+  </section>
+
+  <!-- 08 -->
+  <section class="slide">
+    <div class="kicker">COMPETITION</div>
+    <h1>데뷔 ‘이전’을 다루는 곳은 없습니다</h1>
+    <div class="g2" style="grid-template-columns:1.05fr 1fr;align-items:stretch">
+      <div class="map">
+        <div class="axis" style="top:8px;left:14px">데이터 · 관리</div>
+        <div class="axis" style="bottom:8px;left:14px">관계 · 커뮤니티</div>
+        <div class="axis" style="bottom:8px;left:50%;transform:translateX(-50%)">데뷔 이전 ←→ 데뷔 이후</div>
+        <div class="dot me" style="left:16%;top:18%"><i style="background:var(--v)"></i>ENT GROW</div>
+        <div class="dot" style="left:10%;top:52%"><i></i>오디션 앱</div>
+        <div class="dot" style="left:20%;top:78%"><i></i>유튜브 · 인스타</div>
+        <div class="dot" style="right:8%;top:60%"><i style="background:#3a4470"></i>위버스 · 버블</div>
+      </div>
+      <div class="moat">
+        <h4>방어 전략 · MOAT</h4>
+        <div class="it"><b data-n="01">데이터 복리</b><p>1인 3년 기록은 후발주자가 복제 불가</p></div>
+        <div class="it"><b data-n="02">양면 네트워크</b><p>연습생 ↑ → 팬 ↑ → 기획사 ↑</p></div>
+        <div class="it"><b data-n="03">승인 기반 공개</b><p>무단 스카우트가 아닌 소속사 승인 모델</p></div>
+        <div class="it" style="margin-bottom:0"><b data-n="04">표준화</b><p>EGI가 업계 표준이 되면 전환 비용 급증</p></div>
+      </div>
+    </div>
+    <div class="band"><span>프리데뷔 데이터는 <b>아직 아무도 소유하지 않았습니다.</b></span><em>WHITE SPACE</em></div>
+    <div class="foot"><span>ENT GROW · IR DECK · CONFIDENTIAL</span><span class="no">08</span></div>
+  </section>
+
+  <!-- 09 -->
+  <section class="slide">
+    <div class="kicker">FINANCIALS</div>
+    <h1>2031년 매출 71억 · 영업이익률 32%</h1>
+    <div class="fin">
+      <div>
+        <table class="fin">
+          <colgroup><col><col><col><col><col><col></colgroup>
+          <tr><th>백만 원</th><th>2027</th><th>2028</th><th>2029</th><th>2030</th><th>2031</th></tr>
+          <tr class="main"><td>매출</td><td>50</td><td>370</td><td>1,200</td><td>3,200</td><td>7,100</td></tr>
+          <tr><td>B2B</td><td>32</td><td>165</td><td>480</td><td>1,100</td><td>2,200</td></tr>
+          <tr><td>B2C</td><td>18</td><td>205</td><td>720</td><td>2,100</td><td>4,900</td></tr>
+          <tr class="op"><td>영업이익</td><td>-450</td><td>-900</td><td>-1,300</td><td>-460</td><td>2,280</td></tr>
+          <tr><td>누적 손익</td><td>-450</td><td>-1,350</td><td>-2,650</td><td>-3,110</td><td>-830</td></tr>
+        </table>
+        <div class="rounds">
+          <div class="round"><span>Seed</span><b>3억</b><em>2027 Q1</em></div>
+          <div class="round"><span>Pre-A</span><b>14억</b><em>2027 Q4</em></div>
+          <div class="round"><span>Series A</span><b>15억</b><em>2029 Q1</em></div>
+        </div>
+      </div>
+      <div>
+        <div class="chart">
+          <div class="col"><div class="v">50</div><div class="b" style="height:3%"></div></div>
+          <div class="col"><div class="v">370</div><div class="b" style="height:10%"></div></div>
+          <div class="col"><div class="v">1,200</div><div class="b" style="height:24%"></div></div>
+          <div class="col"><div class="v">3,200</div><div class="b" style="height:50%"></div></div>
+          <div class="col"><div class="v">7,100</div><div class="b" style="height:100%"></div></div>
+        </div>
+        <div class="xlab"><span>2027</span><span>2028</span><span>2029</span><span>2030</span><span>2031</span></div>
+        <div style="text-align:right;font-size:10px;color:var(--muted);margin-top:12px">매출 추이 (백만 원) · 총 32억 투자 · 2031년 BEP</div>
+      </div>
+    </div>
+    <div class="band"><span>2031년 <b>매출 71억 · 영업이익률 32%</b> · BEP 달성</span><em>UNIT ECONOMICS 4.0~4.9x</em></div>
+    <div class="foot"><span>ENT GROW · IR DECK · CONFIDENTIAL</span><span class="no">09</span></div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide cover" style="padding:0">
+    <div class="orb a" style="right:-180px;top:-280px"></div>
+    <div class="ask">
+      <div class="kicker" style="letter-spacing:4px">ASK</div>
+      <h1>32억 원으로<br>3년의 데이터를 쌓겠습니다.</h1>
+      <div class="ms">
+        <div><b>2027</b><span>기획사 10곳 · 연습생 100명 · 팬 1만</span></div>
+        <div><b>2028</b><span>기획사 40곳 · 연습생 800명 · 팬 8만</span></div>
+        <div><b>2029</b><span>기획사 100곳 · 연습생 3,000명 · 팬 30만</span></div>
+      </div>
+      <div class="quote">“K-pop의 다음 3년은 데이터로 증명될 것입니다.”</div>
+    </div>
+    <div class="sign">
+      <b>ENT GROW · 엔터 그로우</b>
+      <p>Grow in the dark. Shine with data.</p>
+      <p style="margin-top:14px;font-size:11px;color:#7F88AB">감사합니다</p>
+    </div>
+  </section>
+
+</div>
+
+<div id="hud">
+  <button id="prev" aria-label="이전">←</button>
+  <div id="pbar"><div id="pfill"></div></div>
+  <span id="pnum">1 / 10</span>
+  <button id="next" aria-label="다음">→</button>
+</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  let idx = 0;
+
+  function render(){
+    slides.forEach((s,i)=>s.classList.toggle('active', i===idx));
+    document.getElementById('pnum').textContent = (idx+1)+' / '+slides.length;
+    document.getElementById('pfill').style.width = ((idx+1)/slides.length*100)+'%';
+  }
+  function go(n){ idx = Math.max(0, Math.min(slides.length-1, n)); render(); }
+
+  document.getElementById('next').onclick = ()=>go(idx+1);
+  document.getElementById('prev').onclick = ()=>go(idx-1);
+  document.addEventListener('keydown', e=>{
+    if(['ArrowRight','ArrowDown',' ','PageDown','Enter'].includes(e.key)){ e.preventDefault(); go(idx+1); }
+    if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(e.key)){ e.preventDefault(); go(idx-1); }
+    if(e.key==='Home') go(0);
+    if(e.key==='End') go(slides.length-1);
+  });
+
+  document.getElementById('stage').addEventListener('click', e=>{
+    if(e.clientX > window.innerWidth/2) go(idx+1); else go(idx-1);
+  });
+
+  function fit(){
+    const s = Math.min(window.innerWidth/1280, window.innerHeight/720);
+    document.getElementById('stage').style.transform = 'scale('+s+')';
+  }
+  window.addEventListener('resize', fit);
+  fit(); render();
+</script>
+</body>
+</html>

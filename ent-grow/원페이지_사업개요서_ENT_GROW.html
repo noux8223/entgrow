@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>ENT GROW · 사업개요서 (1P)</title>
+<style>
+  @page { size: A4; margin: 0; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#0B1020; --sub:#4A5270; --muted:#7A8199; --line:#E3E6F0;
+    --v:#5B3FE0; --v2:#8B6CFF; --mint:#009E82; --pink:#D93E6B; --amber:#B07908;
+    --soft:#F6F7FB;
+  }
+  body{
+    background:#E9EBF2;
+    font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+    color:var(--ink); -webkit-font-smoothing:antialiased;
+  }
+  .page{
+    width:210mm; min-height:297mm; background:#fff; margin:8mm auto;
+    padding:11mm 12mm 9mm; display:flex; flex-direction:column; gap:4.2mm;
+    box-shadow:0 8px 30px rgba(11,16,32,.12); position:relative;
+  }
+  .page::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:2.4mm;
+    background:linear-gradient(90deg,var(--v),var(--v2) 50%,var(--mint));
+  }
+
+  /* header */
+  header{display:flex; justify-content:space-between; align-items:flex-end; padding-bottom:3mm; border-bottom:1px solid var(--line)}
+  .logo{font-size:8.4mm; font-weight:900; letter-spacing:.5px; line-height:1}
+  .logo span{color:var(--v)}
+  .logo-sub{font-size:2.5mm; letter-spacing:1.6px; color:var(--muted); margin-top:1.6mm; font-weight:700}
+  .meta{text-align:right; font-size:2.6mm; color:var(--muted); line-height:1.7}
+  .meta b{color:var(--ink); font-size:2.9mm}
+
+  /* hero */
+  .hero{padding:3.6mm 4.4mm; background:var(--soft); border-left:3px solid var(--v); border-radius:1mm}
+  .hero h1{font-size:3.5mm; line-height:1.55; font-weight:800; letter-spacing:-.2px}
+  .hero h1 em{font-style:normal; color:var(--v)}
+  .hero p{font-size:2.55mm; color:var(--sub); margin-top:1.7mm; line-height:1.55}
+
+  /* section base */
+  h2{font-size:2.5mm; letter-spacing:1.4px; color:var(--v); font-weight:900; margin-bottom:2mm; display:flex; align-items:center; gap:1.6mm}
+  h2::after{content:""; flex:1; height:1px; background:var(--line)}
+
+  .row{display:grid; gap:4mm}
+  .r3{grid-template-columns:1fr 1fr 1fr}
+  .r2{grid-template-columns:1fr 1fr}
+  .r-prob{grid-template-columns:.92fr 1.35fr}
+
+  /* problem */
+  .prob{font-size:2.45mm; color:var(--sub); line-height:1.6}
+  .prob strong{color:var(--pink); font-weight:800}
+  .prob .q{margin-top:1.6mm; padding-left:2.4mm; border-left:2px solid var(--pink); font-size:2.4mm; color:var(--ink); font-weight:700; line-height:1.5}
+
+  /* solution cards */
+  .sol{display:grid; grid-template-columns:repeat(3,1fr); gap:2.4mm}
+  .sol .c{border:1px solid var(--line); border-radius:1.4mm; padding:2.4mm 2.6mm; background:#fff}
+  .sol .tag{font-size:2mm; font-weight:900; letter-spacing:.8px; margin-bottom:1.2mm}
+  .sol .c b{font-size:2.6mm; display:block; margin-bottom:1mm}
+  .sol .c p{font-size:2.1mm; color:var(--sub); line-height:1.5}
+
+  /* customer */
+  .cust{border-radius:1.4mm; padding:2.4mm 2.8mm; background:var(--soft); border:1px solid var(--line)}
+  .cust .who{font-size:2.1mm; font-weight:900; letter-spacing:.6px; margin-bottom:1mm}
+  .cust p{font-size:2.15mm; color:var(--sub); line-height:1.5}
+  .cust.c1{border-top:2px solid var(--v)}
+  .cust.c2{border-top:2px solid var(--pink)}
+  .cust.c3{border-top:2px solid var(--mint)}
+
+  /* market */
+  .mkt{display:flex; gap:2.4mm}
+  .mkt .m{flex:1; border:1px solid var(--line); border-radius:1.2mm; padding:2mm 2.2mm}
+  .mkt .l{font-size:2mm; font-weight:900; letter-spacing:.7px}
+  .mkt .v{font-size:3.4mm; font-weight:900; margin:.6mm 0 .4mm}
+  .mkt .d{font-size:1.95mm; color:var(--muted); line-height:1.4}
+
+  /* bm table */
+  table{width:100%; border-collapse:collapse; font-size:2.15mm}
+  th,td{border-bottom:1px solid var(--line); padding:1.5mm 1.6mm; text-align:left}
+  th{font-size:1.95mm; color:var(--muted); font-weight:800; letter-spacing:.4px; border-bottom:1.4px solid var(--ink)}
+  td:last-child,th:last-child{text-align:right}
+  td b{font-weight:800}
+  .hl{color:var(--v); font-weight:900}
+
+  /* diff bullets */
+  ul.diff{list-style:none}
+  ul.diff li{font-size:2.2mm; color:var(--sub); line-height:1.5; padding-left:3mm; position:relative; margin-bottom:1.6mm}
+  ul.diff li::before{content:""; position:absolute; left:0; top:1.1mm; width:1.3mm; height:1.3mm; border-radius:50%; background:var(--v2)}
+  ul.diff li b{color:var(--ink)}
+
+  /* roadmap */
+  .road{display:grid; grid-template-columns:repeat(5,1fr); gap:1.4mm}
+  .road .p{border:1px solid var(--line); border-radius:1.2mm; padding:1.8mm 1.8mm; background:#fff}
+  .road .y{font-size:1.85mm; font-weight:900; letter-spacing:.4px}
+  .road .n{font-size:2.3mm; font-weight:900; margin:.5mm 0 .6mm}
+  .road .t{font-size:1.85mm; color:var(--sub); line-height:1.4}
+
+  /* footer */
+  .foot{margin-top:auto; display:flex; justify-content:space-between; align-items:center; border-top:1.4px solid var(--ink); padding-top:2.2mm}
+  .foot .f1{font-size:2.2mm; color:var(--muted); line-height:1.5}
+  .foot .f2{text-align:right; font-size:2.4mm; font-weight:800}
+
+  .tagline{font-size:2.2mm; font-style:italic; color:var(--mint); font-weight:700}
+
+  #save{
+    position:fixed; right:18px; bottom:18px; z-index:10;
+    background:var(--v); color:#fff; border:none; border-radius:999px;
+    padding:12px 20px; font-size:13px; font-weight:700; cursor:pointer;
+    box-shadow:0 6px 20px rgba(91,63,224,.35); font-family:inherit;
+  }
+  @media print{
+    body{background:#fff}
+    .page{margin:0; box-shadow:none; width:210mm; height:297mm; page-break-after:avoid}
+    #save{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header>
+    <div>
+      <div class="logo">ENT <span>GROW</span></div>
+      <div class="logo-sub">IDOL TRAINEE DATA PLATFORM</div>
+    </div>
+    <div class="meta">
+      <b>사업개요서</b><br>
+      B2B2C · 성장 데이터 · 프리데뷔<br>
+      2026. 11. &nbsp;|&nbsp; v0.9
+    </div>
+  </header>
+
+  <div class="hero">
+    <h1>아이돌 연습생의 <em>연습 기록</em>을 성장 포트폴리오로,<br>그 기록을 <em>데뷔의 기회</em>로 바꾸는 B2B2C 데이터 플랫폼</h1>
+    <p>연습생에게는 성장 포트폴리오를, 팬에게는 응원하는 연습생의 정보를, 엔터테인먼트 회사에는 검증된 연습생 데이터를 제공합니다.</p>
+  </div>
+
+  <div class="row r-prob">
+    <div>
+      <h2>PROBLEM</h2>
+      <div class="prob">
+        데뷔까지 <strong>3~7년</strong>, 매일 6~10시간 연습하지만 기록은 남지 않습니다.
+        사진과 영상은 폰과 메신저에 흩어져 유실되고, 성장은 확인할 수 없으며,
+        데뷔 전에는 팬과의 접점조차 없습니다.
+        <div class="q">“연습생의 노력은 아무도 알아주지 않고,<br>성공 가능성은 아무도 모르고 있다.”</div>
+      </div>
+    </div>
+    <div>
+      <h2>SOLUTION</h2>
+      <div class="sol">
+        <div class="c">
+          <div class="tag" style="color:var(--v)">GROW · 연습생</div>
+          <b>연습 기록</b>
+          <p>연습 일지, 사진·영상 보관, 스킬 트래킹</p>
+          <p style="margin-top:1mm">→ 성장 포트폴리오</p>
+        </div>
+        <div class="c">
+          <div class="tag" style="color:var(--pink)">FAN · 팬</div>
+          <b>성장 타임라인</b>
+          <p>공개 프로필, 응원, 멤버십, 후원</p>
+          <p style="margin-top:1mm">→ 데뷔 전 팬덤 형성</p>
+        </div>
+        <div class="c">
+          <div class="tag" style="color:var(--mint)">SCOUT · 엔터</div>
+          <b>검증된 데이터</b>
+          <p>통합 관리, 성장 리포트, 스카우트 검색</p>
+          <p style="margin-top:1mm">→ 스카우트 정확도 향상</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h2>CUSTOMER</h2>
+    <div class="row r3">
+      <div class="cust c1">
+        <div class="who" style="color:var(--v)">연습생 · 5,000~10,000명</div>
+        <p>노력이 기록되고 인정받는 경험. 데뷔 전 팬 확보.</p>
+      </div>
+      <div class="cust c2">
+        <div class="who" style="color:var(--pink)">팬 · 50만~100만 명</div>
+        <p>데뷔 전부터 응원하고 성장 서사에 참여.</p>
+      </div>
+      <div class="cust c3">
+        <div class="who" style="color:var(--mint)">엔터 · 100~200곳</div>
+        <p>관리 비용 절감, 데이터 기반 스카우팅.</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h2>MARKET</h2>
+    <div class="mkt">
+      <div class="m"><div class="l" style="color:var(--v)">TAM</div><div class="v">3조 원</div><div class="d">글로벌 K-pop 팬덤 플랫폼 + 아티스트 관리 SaaS</div></div>
+      <div class="m"><div class="l" style="color:var(--v2)">SAM</div><div class="v">2,000억 원</div><div class="d">국내 연습생 관리 + 프리데뷔 팬덤 + 스카우트</div></div>
+      <div class="m"><div class="l" style="color:var(--mint)">SOM</div><div class="v">300억 원</div><div class="d">3년 내 확보 가능 시장 (기획사 100곳)</div></div>
+    </div>
+  </div>
+
+  <div class="row r2">
+    <div>
+      <h2>BUSINESS MODEL</h2>
+      <table>
+        <tr><th>수익원</th><th>과금</th><th>Y3</th></tr>
+        <tr><td>기획사 구독</td><td>월 19~49만 원</td><td class="hl">27%</td></tr>
+        <tr><td>스카우트 열람</td><td>월 29만 원 / 성사</td><td class="hl">12%</td></tr>
+        <tr><td>팬 멤버십</td><td>월 4,900원</td><td class="hl">35%</td></tr>
+        <tr><td>후원 수수료</td><td>10~15%</td><td class="hl">17%</td></tr>
+        <tr><td>커머스·광고</td><td>수수료 / 광고</td><td class="hl">9%</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2>DIFFERENTIATION</h2>
+      <ul class="diff">
+        <li><b>데뷔 이전</b>을 다루는 유일한 데이터 레이어</li>
+        <li><b>EGI 성장지수</b> — 기록이 곧 성장 지표</li>
+        <li><b>권한 기반 공개</b> — 소속사가 공개 범위 통제</li>
+        <li><b>데이터 복리</b> — 1인 3년 기록은 복제 불가</li>
+      </ul>
+    </div>
+  </div>
+
+  <div>
+    <h2>ROADMAP &amp; GOAL</h2>
+    <div class="road">
+      <div class="p"><div class="y" style="color:var(--v)">2027 H1</div><div class="n">파일럿</div><div class="t">기획사 3곳<br>연습생 100명</div></div>
+      <div class="p"><div class="y" style="color:var(--v2)">2027 H2</div><div class="n">검증</div><div class="t">기획사 10곳<br>팬 1만</div></div>
+      <div class="p"><div class="y" style="color:var(--pink)">2028</div><div class="n">확산</div><div class="t">기획사 40곳<br>팬 8만</div></div>
+      <div class="p"><div class="y" style="color:var(--amber)">2029</div><div class="n">표준화</div><div class="t">기획사 100곳<br>팬 30만</div></div>
+      <div class="p"><div class="y" style="color:var(--mint)">2030~</div><div class="n">글로벌</div><div class="t">해외 레이블<br>글로벌 팬</div></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div>
+      <div class="tagline">Grow in the dark. Shine with data.</div>
+      <div class="f1" style="margin-top:1.2mm">3개년 매출 0.5억 → 3.7억 → 12억 &nbsp;·&nbsp; 투자 유치 32억 (Seed 3 / Pre-A 14 / A 15)</div>
+    </div>
+    <div class="f2">
+      ENT GROW<br>
+      <span style="font-weight:400;font-size:2.1mm;color:var(--muted)">문의 · (이메일 / 연락처 기재)</span>
+    </div>
+  </div>
+
+</div>
+
+<button id="save" onclick="window.print()">PDF로 저장 / 인쇄</button>
+
+</body>
+</html>
